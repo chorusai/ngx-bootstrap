@@ -10,7 +10,7 @@
 <ng-template #bs3Template>
   <ul class="dropdown-menu">
     <ng-template ngFor let-match let-i="index" [ngForOf]="matches">
-      <li *ngIf="match.isHeader()" class="dropdown-header">{{ match }}</li>
+      <li *ngIf="match.isHeader()" class="dropdown-header" (mouseenter)="selectActive(match)" (click)="selectMatch(match, $event)">{{ match }}</li>
       <li *ngIf="!match.isHeader()" [class.active]="isActive(match)" (mouseenter)="selectActive(match)">
         <a href="#" (click)="selectMatch(match, $event)" tabindex="-1">
           <ng-template [ngTemplateOutlet]="itemTemplate || bsItemTemplate"
