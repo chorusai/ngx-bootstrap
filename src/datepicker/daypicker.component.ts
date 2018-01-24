@@ -1,4 +1,4 @@
-// @deprecated
+﻿// @deprecated
 // tslint:disable
 import { Component, OnInit } from '@angular/core';
 import { isBs3 } from '../utils/theme-provider';
@@ -7,7 +7,7 @@ import { DatePickerInnerComponent } from './datepicker-inner.component';
 @Component({
   selector: 'daypicker',
   template: `
-<table *ngIf="datePicker.datepickerMode==='day'" role="grid" [attr.aria-labelledby]="datePicker.uniqueId+'-title'" aria-activedescendant="activeDateId">
+<table *ngIf="datePicker.datepickerMode === 'day'" role="grid" [attr.aria-labelledby]="datePicker.uniqueId + '-title'" aria-activedescendant="activeDateId">
   <thead>
     <tr>
       <th>
@@ -25,7 +25,7 @@ import { DatePickerInnerComponent } from './datepicker-inner.component';
       <th [attr.colspan]="5 + (datePicker.showWeeks ? 1 : 0)">
         <button [id]="datePicker.uniqueId + '-title'"
                 type="button" class="btn btn-default btn-secondary btn-sm"
-                (click)="datePicker.toggleMode()"
+                (click)="datePicker.toggleMode(0)"
                 [disabled]="datePicker.datepickerMode === datePicker.maxMode"
                 [ngClass]="{disabled: datePicker.datepickerMode === datePicker.maxMode}" tabindex="-1" style="width:100%;">
           <strong>{{ title }}</strong>
@@ -179,9 +179,9 @@ export class DayPickerComponent implements OnInit {
       date = this.datePicker.fixTimeZone(date);
       dates[i++] = date;
       current = new Date(
-        current.getFullYear(),
-        current.getMonth(),
-        current.getDate() + 1
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + 1
       );
     }
     return dates;

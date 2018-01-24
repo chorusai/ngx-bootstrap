@@ -4,8 +4,8 @@
  */
 import { TestBed, inject } from '@angular/core/testing';
 import { createGenericTestComponent } from './test/common';
-import { Component } from '@angular/core';
-import { AlertModule, AlertComponent, AlertConfig } from '../../alert';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { AlertModule, AlertComponent, AlertConfig } from '../../alert/index';
 
 @Component({
   selector: 'test-cmp',
@@ -32,13 +32,17 @@ describe('ngb-alert', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [AlertModule.forRoot()]
+      imports: [AlertModule.forRoot()],
+      providers: [
+        AlertComponent, ChangeDetectorRef
+      ]
     });
   });
 
   it('should initialize inputs with default values', () => {
     const defaultConfig = new AlertConfig();
-    const alertCmp = new AlertComponent(new AlertConfig());
+    /*const alertCmp = new AlertComponent(new AlertConfig());*/
+    const alertCmp = TestBed.get(AlertComponent);
 
     expect(alertCmp.dismissible).toBe(defaultConfig.dismissible);
     expect(alertCmp.type).toBe(defaultConfig.type);

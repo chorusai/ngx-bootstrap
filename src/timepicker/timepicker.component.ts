@@ -25,8 +25,9 @@ import {
   isValidDate,
   padNumber,
   parseTime,
-  isInputValid
+  isInputValid, parseSeconds
 } from './timepicker.utils';
+import { fakeAsync } from '@angular/core/testing';
 
 export const TIMEPICKER_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -59,6 +60,9 @@ export const TIMEPICKER_CONTROL_VALUE_ACCESSOR: any = {
       transform: rotate(-135deg);
       top: -2px;
     }
+    .bs-timepicker-field{
+      width: 50px;
+    }
   `],
   encapsulation: ViewEncapsulation.None
 })
@@ -81,12 +85,14 @@ export class TimepickerComponent
   @Input() arrowkeys: boolean;
   /** if true spinner arrows above and below the inputs will be shown */
   @Input() showSpinners: boolean;
+  /** if true meridian button will be shown */
   @Input() showMeridian: boolean;
+  /** show minutes in timepicker */
+  @Input() showMinutes: boolean;
+  /** show seconds in timepicker */
   @Input() showSeconds: boolean;
-
   /** meridian labels based on locale */
   @Input() meridians: string[];
-
   /** minimum time user can select */
   @Input() min: Date;
   /** maximum time user can select */
@@ -200,7 +206,10 @@ export class TimepickerComponent
   }
 
   _updateTime() {
-    if (!isInputValid(this.hours, this.minutes, this.seconds, this.isPM())) {
+    const _seconds = this.showSeconds ? this.seconds : void 0;
+    const _minutes = this.showMinutes ? this.minutes : void 0;
+    if (!isInputValid(this.hours, _minutes, _seconds, this.isPM())) {
+      this.isValid.emit(false);
       this.onChange(null);
 
       return;
@@ -235,6 +244,8 @@ export class TimepickerComponent
   writeValue(obj: any): void {
     if (isValidDate(obj)) {
       this._store.dispatch(this._timepickerActions.writeValue(parseTime(obj)));
+    } else if (obj == null) {
+      this._store.dispatch(this._timepickerActions.writeValue(null));
     }
   }
 

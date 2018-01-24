@@ -5,7 +5,7 @@ import { setTheme } from 'ngx-bootstrap/utils';
 import { StyleManager } from '../../theme/style-manager';
 import { ThemeStorage } from '../../theme/theme-storage';
 
-const _bs4Css = 'assets/css/bootstrap-4.0.0-beta/css/bootstrap.min.css';
+const _bs4Css = 'assets/css/bootstrap-4.0.0/css/bootstrap.min.css';
 
 @Component({
   selector: 'landing',
@@ -27,12 +27,14 @@ export class LandingComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): any {
-    this.http
-      .get('assets/json/current-version.json')
-      .map(res => res.json())
-      .subscribe((data: any) => {
-        this.currentVersion = data.version;
-      });
+    if (typeof window !== 'undefined') {
+      this.http
+        .get('assets/json/current-version.json')
+        .map(res => res.json())
+        .subscribe((data: any) => {
+          this.currentVersion = data.version;
+        });
+    }
   }
 
   installTheme(theme: 'bs3' | 'bs4') {

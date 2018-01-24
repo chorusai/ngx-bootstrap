@@ -1,4 +1,4 @@
-/* tslint:disable:max-file-line-count */
+﻿/* tslint:disable:max-file-line-count */
 import {
   Component,
   EventEmitter,
@@ -62,25 +62,21 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   @Input() monthColLimit: number;
   @Input() yearColLimit: number;
   @Input() dateDisabled: { date: Date; mode: string }[];
+  @Input() dayDisabled: number[];
   @Input() initDate: Date;
 
-  @Output()
-  selectionDone: EventEmitter<Date> = new EventEmitter<Date>(undefined);
-
+  @Output() selectionDone: EventEmitter<Date> = new EventEmitter<Date>(undefined);
   @Output() update: EventEmitter<Date> = new EventEmitter<Date>(false);
-
-  @Output()
-  activeDateChange: EventEmitter<Date> = new EventEmitter<Date>(
-    undefined
-  );
+  @Output() activeDateChange: EventEmitter<Date> = new EventEmitter<Date>(undefined);
 
   stepDay: any = {};
   stepMonth: any = {};
   stepYear: any = {};
 
+  uniqueId: string;
+
   protected modes: string[] = ['day', 'month', 'year'];
   protected dateFormatter: DateFormatter = new DateFormatter();
-  protected uniqueId: string;
   protected _activeDate: Date;
   protected selectedDate: Date;
   protected activeDateId: string;
@@ -219,6 +215,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
       date.getMonth(),
       date.getDate()
     );
+    dateObject.date = this.fixTimeZone(dateObject.date);
     dateObject.label = this.dateFilter(date, format);
     dateObject.selected = this.compare(date, this.selectedDate) === 0;
     dateObject.disabled = this.isDisabled(date);
@@ -265,6 +262,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
         date.getMonth(),
         date.getDate()
       );
+      this.activeDate = this.fixTimeZone(this.activeDate);
       if (isManual) {
         this.selectionDone.emit(this.activeDate);
       }
@@ -274,6 +272,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
         date.getMonth(),
         date.getDate()
       );
+      this.activeDate = this.fixTimeZone(this.activeDate);
       if (isManual) {
         this.datepickerMode = this.modes[
           this.modes.indexOf(this.datepickerMode) - 1
@@ -380,6 +379,12 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
           }
         }
       );
+    }
+
+    if (this.dayDisabled) {
+      isDateDisabled =
+        isDateDisabled ||
+        this.dayDisabled.indexOf(date.getDay()) > -1;
     }
 
     return (

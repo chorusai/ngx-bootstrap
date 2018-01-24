@@ -1,27 +1,34 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
+import { defineLocale, LocaleData } from 'ngx-bootstrap/chronos';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import {
+  arLocale, csLocale, daLocale, deLocale, enGbLocale, esDoLocale, esLocale, esUsLocale, frLocale, heLocale, hiLocale,
+  huLocale, itLocale, jaLocale, koLocale, nlBeLocale, nlLocale, plLocale, ptBrLocale, ruLocale, svLocale, thLocale,
+  trLocale, zhCnLocale
+} from 'ngx-bootstrap/locale';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
-import { SharedModule } from '../../shared';
+import { DocsModule } from '../../docs';
 import { DatepickerSectionComponent } from './datepicker-section.component';
-import { DEMO_COMPONENTS } from './demos';
 import { routes } from './demo-datepicker.routes';
+import { DEMO_COMPONENTS } from './demos';
 
-import { defineLocale } from 'ngx-bootstrap/bs-moment';
-import {
-
-  ar, cs, de, enGb, es, esDo, esUs, fr, hi, it, ja, ko, nl, nlBe, pl, ptBr, ru, zhCn, tr
-} from 'ngx-bootstrap/locale';
-
-const locales = [ar, cs, de, enGb, es, esDo, esUs, fr, hi, it, ja, ko, nl, nlBe, pl, ptBr, ru, zhCn, tr];
-
-locales.forEach(locale => defineLocale(locale.abbr, locale));
+const locales = [
+  arLocale, csLocale, daLocale, deLocale, enGbLocale, esLocale, esDoLocale, esUsLocale,
+  frLocale, hiLocale, heLocale, huLocale, itLocale, jaLocale, koLocale, nlLocale,
+  nlBeLocale, plLocale, ptBrLocale, svLocale, ruLocale, zhCnLocale, trLocale, thLocale
+];
+locales.forEach((locale: LocaleData) => defineLocale(locale.abbr, locale));
 
 @NgModule({
-  declarations: [DatepickerSectionComponent, ...DEMO_COMPONENTS],
+  declarations: [
+    DatepickerSectionComponent,
+    ...DEMO_COMPONENTS
+  ],
   imports: [
     DatepickerModule.forRoot(),
     BsDatepickerModule.forRoot(),
@@ -29,9 +36,11 @@ locales.forEach(locale => defineLocale(locale.abbr, locale));
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
+    DocsModule,
     RouterModule.forChild(routes)
   ],
-  exports: [DatepickerSectionComponent]
+  exports: [DatepickerSectionComponent],
+  entryComponents: [...DEMO_COMPONENTS]
 })
-export class DemoDatepickerModule {}
+export class DemoDatepickerModule {
+}

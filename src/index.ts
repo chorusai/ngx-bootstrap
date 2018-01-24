@@ -1,46 +1,49 @@
 /* tslint:disable: max-classes-per-file */
-import { ModuleWithProviders, NgModule } from '@angular/core';
 import { AccordionModule } from './accordion/accordion.module';
 import { AlertModule } from './alert/alert.module';
 import { ButtonsModule } from './buttons/buttons.module';
 import { CarouselModule } from './carousel/carousel.module';
 import { CollapseModule } from './collapse/collapse.module';
+import { BsDaterangepickerConfig } from './datepicker/bs-daterangepicker.config';
 import { DatepickerModule } from './datepicker/datepicker.module';
 import { BsDropdownModule } from './dropdown/bs-dropdown.module';
 import { ModalModule } from './modal/modal.module';
 import { PaginationModule } from './pagination/pagination.module';
+import { PopoverModule } from './popover/popover.module';
 import { ProgressbarModule } from './progressbar/progressbar.module';
 import { RatingModule } from './rating/rating.module';
-import { SortableModule } from './sortable';
+import { SortableModule } from './sortable/index';
 import { TabsModule } from './tabs/tabs.module';
 import { TimepickerModule } from './timepicker/timepicker.module';
 import { TooltipModule } from './tooltip/tooltip.module';
 import { TypeaheadModule } from './typeahead/typeahead.module';
-import { PopoverModule } from './popover/popover.module';
+
+export { listLocales } from './chronos/locale/locales';
+export { setTheme } from './utils/theme-provider';
 
 export {
   AccordionComponent,
   AccordionConfig,
   AccordionModule,
   AccordionPanelComponent
-} from './accordion';
+} from './accordion/index';
 
-export { AlertComponent, AlertConfig, AlertModule } from './alert';
+export { AlertComponent, AlertConfig, AlertModule } from './alert/index';
 
 export {
   ButtonCheckboxDirective,
   ButtonRadioDirective,
   ButtonsModule
-} from './buttons';
+} from './buttons/index';
 
 export {
   CarouselComponent,
   CarouselConfig,
   CarouselModule,
   SlideComponent
-} from './carousel';
+} from './carousel/index';
 
-export { CollapseDirective, CollapseModule } from './collapse';
+export { CollapseDirective, CollapseModule } from './collapse/index';
 
 export {
   DateFormatter,
@@ -50,8 +53,11 @@ export {
   DayPickerComponent,
   MonthPickerComponent,
   YearPickerComponent,
-  BsDatepickerModule
-} from './datepicker';
+  BsDatepickerModule,
+  BsDatepickerConfig,
+  BsDaterangepickerConfig,
+  BsLocaleService
+} from './datepicker/index';
 
 export {
   ModalDirective,
@@ -61,7 +67,7 @@ export {
   ModalModule,
   BsModalRef,
   BsModalService
-} from './modal';
+} from './modal/index';
 
 export {
   BsDropdownModule,
@@ -71,24 +77,23 @@ export {
   BsDropdownDirective,
   BsDropdownMenuDirective,
   BsDropdownToggleDirective
-} from './dropdown';
+} from './dropdown/index';
 
 export {
   PagerComponent,
   PaginationComponent,
   PaginationConfig,
   PaginationModule
-} from './pagination';
+} from './pagination/index';
 
 export {
   BarComponent,
   ProgressbarComponent,
   ProgressbarConfig,
-  ProgressbarModule,
-  ProgressDirective
-} from './progressbar';
+  ProgressbarModule
+} from './progressbar/index';
 
-export { RatingComponent, RatingModule } from './rating';
+export { RatingComponent, RatingModule } from './rating/index';
 
 export {
   DraggableItem,
@@ -96,7 +101,7 @@ export {
   SortableItem,
   SortableComponent,
   SortableModule
-} from './sortable';
+} from './sortable/index';
 
 export {
   NgTranscludeDirective,
@@ -105,20 +110,20 @@ export {
   TabsetComponent,
   TabsetConfig,
   TabsModule
-} from './tabs';
+} from './tabs/index';
 
 export {
   TimepickerComponent,
   TimepickerConfig,
   TimepickerModule
-} from './timepicker';
+} from './timepicker/index';
 
 export {
   TooltipConfig,
   TooltipContainerComponent,
   TooltipDirective,
   TooltipModule
-} from './tooltip';
+} from './tooltip/index';
 
 export {
   TypeaheadOptions,
@@ -126,78 +131,30 @@ export {
   TypeaheadDirective,
   TypeaheadMatch,
   TypeaheadModule
-} from './typeahead';
+} from './typeahead/index';
 
 export {
   PopoverConfig,
   PopoverContainerComponent,
   PopoverDirective,
   PopoverModule
-} from './popover';
+} from './popover/index';
 
-export { OnChange, LinkedList, isBs3, Trigger, Utils } from './utils';
+export { OnChange, LinkedList, isBs3, Trigger, Utils } from './utils/index';
 
 export {
   ComponentLoader,
   ComponentLoaderFactory,
   ContentRef
-} from './component-loader';
+} from './component-loader/index';
 
 export {
   Positioning,
   PositioningOptions,
   PositioningService,
   positionElements
-} from './positioning';
+} from './positioning/index';
 
-export { defineLocale, getSetGlobalLocale } from './bs-moment';
+export { defineLocale, getSetGlobalLocale, LocaleData } from './chronos/index';
 
-const MODULES = [
-  AccordionModule,
-  AlertModule,
-  ButtonsModule,
-  CarouselModule,
-  CollapseModule,
-  DatepickerModule,
-  BsDropdownModule,
-  ModalModule,
-  PaginationModule,
-  ProgressbarModule,
-  PopoverModule,
-  RatingModule,
-  TabsModule,
-  TimepickerModule,
-  TooltipModule,
-  TypeaheadModule
-];
-
-@NgModule({
-  imports: [
-    AccordionModule.forRoot(),
-    AlertModule.forRoot(),
-    ButtonsModule.forRoot(),
-    CarouselModule.forRoot(),
-    CollapseModule.forRoot(),
-    DatepickerModule.forRoot(),
-    BsDropdownModule.forRoot(),
-    ModalModule.forRoot(),
-    PaginationModule.forRoot(),
-    ProgressbarModule.forRoot(),
-    PopoverModule.forRoot(),
-    RatingModule.forRoot(),
-    TabsModule.forRoot(),
-    TimepickerModule.forRoot(),
-    TooltipModule.forRoot(),
-    TypeaheadModule.forRoot(),
-    SortableModule.forRoot()
-  ],
-  exports: MODULES
-})
-export class BsRootModule {}
-
-@NgModule({ exports: MODULES })
-export class Ng2BootstrapModule {
-  static forRoot(): ModuleWithProviders {
-    return { ngModule: BsRootModule };
-  }
-}
+export * from './locale';

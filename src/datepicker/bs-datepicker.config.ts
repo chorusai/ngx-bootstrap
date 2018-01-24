@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import {
-  DatepickerFormatOptions,
   DatepickerRenderOptions
 } from './models/index';
 
+
+/**
+ * For date range picker there are `BsDaterangepickerConfig` which inherits all properties,
+ * except `displayMonths`, for range picker it default to `2`
+ */
 @Injectable()
 export class BsDatepickerConfig
-  implements DatepickerRenderOptions, DatepickerFormatOptions {
+  implements DatepickerRenderOptions {
   value?: Date | Date[];
   isDisabled?: boolean;
   /**
@@ -36,11 +40,6 @@ export class BsDatepickerConfig
   rangeInputFormat = 'L';
 
   // DatepickerFormatOptions
-  /**
-   * Allows to globally set default locale of datepicker,
-   * see documentation on how to enable custom locales
-   */
-  locale = 'en';
   monthTitle = 'MMMM';
   yearTitle = 'YYYY';
   dayLabel = 'D';

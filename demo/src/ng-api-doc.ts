@@ -19,15 +19,20 @@ export const ngdoc: any = {
       {
         "name": "isOpen",
         "type": "boolean",
-        "description": "<p>Is accordion group open or closed </p>\n"
+        "description": "<p>Is accordion group open or closed. This property supports two-way binding </p>\n"
       },
       {
         "name": "panelClass",
         "type": "string",
-        "description": "<p>Provides an ability to use Bootstrap&#39;s contextual panel classes\n(<code>panel-primary</code>, <code>panel-success</code>, <code>panel-info</code>, etc...).\nList of all available classes [available here]\n(<a href=\"http://getbootstrap.com/components/#panels-alternatives\" target=\"_blank\" title=\"null\">http://getbootstrap.com/components/#panels-alternatives</a>)</p>\n"
+        "description": "<p>Provides an ability to use Bootstrap&#39;s contextual panel classes\n(<code>panel-primary</code>, <code>panel-success</code>, <code>panel-info</code>, etc...).\nList of all available classes [available here]\n(<a href=\"https://getbootstrap.com/docs/3.3/components/#panels-alternatives\" target=\"_blank\" title=\"null\">https://getbootstrap.com/docs/3.3/components/#panels-alternatives</a>)</p>\n"
       }
     ],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "isOpenChange",
+        "description": "<p>Emits when the opened state changes </p>\n"
+      }
+    ],
     "properties": [],
     "methods": []
   },
@@ -77,6 +82,12 @@ export const ngdoc: any = {
         "name": "dismissOnTimeout",
         "type": "string | number",
         "description": "<p>Number in milliseconds, after which alert will be closed </p>\n"
+      },
+      {
+        "name": "isOpen",
+        "defaultValue": "true",
+        "type": "boolean",
+        "description": "<p>Is alert visible </p>\n"
       },
       {
         "name": "type",
@@ -131,27 +142,6 @@ export const ngdoc: any = {
       }
     ]
   },
-  "LocaleOptionsFormat": {
-    "fileName": "src/bs-moment/locale/locale.class.ts",
-    "className": "LocaleOptionsFormat",
-    "description": "",
-    "methods": [],
-    "properties": []
-  },
-  "LocaleData": {
-    "fileName": "src/bs-moment/locale/locale.class.ts",
-    "className": "LocaleData",
-    "description": "",
-    "methods": [],
-    "properties": []
-  },
-  "TimeUnit": {
-    "fileName": "src/bs-moment/types.ts",
-    "className": "TimeUnit",
-    "description": "",
-    "methods": [],
-    "properties": []
-  },
   "ButtonCheckboxDirective": {
     "fileName": "src/buttons/button-checkbox.directive.ts",
     "className": "ButtonCheckboxDirective",
@@ -175,6 +165,16 @@ export const ngdoc: any = {
     "properties": [],
     "methods": []
   },
+  "ButtonRadioGroupDirective": {
+    "fileName": "src/buttons/button-radio-group.directive.ts",
+    "className": "ButtonRadioGroupDirective",
+    "description": "<p>A group of radio buttons.\nA value of a selected button is bound to a variable specified via ngModel.</p>\n",
+    "selector": "[btnRadioGroup]",
+    "inputs": [],
+    "outputs": [],
+    "properties": [],
+    "methods": []
+  },
   "ButtonRadioDirective": {
     "fileName": "src/buttons/button-radio.directive.ts",
     "className": "ButtonRadioDirective",
@@ -185,6 +185,11 @@ export const ngdoc: any = {
         "name": "btnRadio",
         "type": "any",
         "description": "<p>Radio button value, will be set to <code>ngModel</code> </p>\n"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "<p>If <code>true</code> — radio button is disabled </p>\n"
       },
       {
         "name": "uncheckable",
@@ -226,6 +231,11 @@ export const ngdoc: any = {
         "name": "noWrap",
         "type": "boolean",
         "description": "<p>If <code>true</code> — carousel will not cycle continuously and will have hard stops (prevent looping) </p>\n"
+      },
+      {
+        "name": "showIndicators",
+        "type": "boolean",
+        "description": "<p>If <code>true</code> — carousel-indicators are visible  </p>\n"
       }
     ],
     "outputs": [
@@ -389,6 +399,12 @@ export const ngdoc: any = {
         "defaultValue": "false",
         "type": "boolean",
         "description": "<p>Is slides can wrap from the last to the first slide </p>\n"
+      },
+      {
+        "name": "showIndicators",
+        "defaultValue": "true",
+        "type": "boolean",
+        "description": "<p>Show carousel-indicators </p>\n"
       }
     ]
   },
@@ -419,6 +435,164 @@ export const ngdoc: any = {
       }
     ],
     "methods": []
+  },
+  "DateParsingConfig": {
+    "fileName": "src/chronos/create/parsing.types.ts",
+    "className": "DateParsingConfig",
+    "description": "",
+    "methods": [],
+    "properties": [
+      {
+        "name": "_a",
+        "type": "number[]",
+        "description": "<p>DateArray [year, month, date, .....] </p>\n"
+      },
+      {
+        "name": "_changeInProgress",
+        "type": "boolean",
+        "description": "<p>used in set offset </p>\n"
+      },
+      {
+        "name": "_d",
+        "type": "Date",
+        "description": "<p>date value </p>\n"
+      },
+      {
+        "name": "_f",
+        "type": "string | string[]",
+        "description": "<p>date format </p>\n"
+      },
+      {
+        "name": "_i",
+        "type": "DateInput",
+        "description": "<p>input to parse: could be string, number[], number, Date, object </p>\n"
+      },
+      {
+        "name": "_isPm",
+        "type": "boolean",
+        "description": "<p>is PM </p>\n"
+      },
+      {
+        "name": "_isValid",
+        "type": "boolean",
+        "description": "<p>is valid </p>\n"
+      },
+      {
+        "name": "_l",
+        "type": "string",
+        "description": "<p>locale key, &#39;en&#39; by default </p>\n"
+      },
+      {
+        "name": "_locale",
+        "type": "Locale",
+        "description": "<p>date locale obj </p>\n"
+      },
+      {
+        "name": "_meridiem",
+        "type": "string",
+        "description": "<p>date meridiem </p>\n"
+      },
+      {
+        "name": "_nextDay",
+        "type": "boolean",
+        "description": "<p>add one day to result at the end of parsing </p>\n"
+      },
+      {
+        "name": "_offset",
+        "type": "number",
+        "description": "<p>utc time offset </p>\n"
+      },
+      {
+        "name": "_pf",
+        "type": "DateParsingFlags",
+        "description": "<p>date parsing flags </p>\n"
+      },
+      {
+        "name": "_strict",
+        "type": "boolean",
+        "description": "<p>use strict parse format </p>\n"
+      },
+      {
+        "name": "_tzm",
+        "type": "number",
+        "description": "<p>time zone </p>\n"
+      },
+      {
+        "name": "_w",
+        "type": "WeekParsing",
+        "description": "<p>date specific info \nweek </p>\n"
+      }
+    ]
+  },
+  "DateParsingFlags": {
+    "fileName": "src/chronos/create/parsing.types.ts",
+    "className": "DateParsingFlags",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "LocaleOptionsFormat": {
+    "fileName": "src/chronos/locale/locale.class.ts",
+    "className": "LocaleOptionsFormat",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "LocaleData": {
+    "fileName": "src/chronos/locale/locale.class.ts",
+    "className": "LocaleData",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "CalendarSpec": {
+    "fileName": "src/chronos/moment/calendar.ts",
+    "className": "CalendarSpec",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "MomentFn": {
+    "fileName": "src/chronos/test/chain.ts",
+    "className": "MomentFn",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "MomentInputObject": {
+    "fileName": "src/chronos/test/chain.ts",
+    "className": "MomentInputObject",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "TimeUnit": {
+    "fileName": "src/chronos/types.ts",
+    "className": "TimeUnit",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "DateFormatterOptions": {
+    "fileName": "src/chronos/types.ts",
+    "className": "DateFormatterOptions",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "DateObject": {
+    "fileName": "src/chronos/types.ts",
+    "className": "DateObject",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "WeekParsing": {
+    "fileName": "src/chronos/types.ts",
+    "className": "WeekParsing",
+    "description": "",
+    "methods": [],
+    "properties": []
   },
   "CollapseDirective": {
     "fileName": "src/collapse/collapse.directive.ts",
@@ -495,11 +669,11 @@ export const ngdoc: any = {
     "properties": [],
     "methods": []
   },
-  "BsDatepickerComponent": {
+  "BsDatepickerDirective": {
     "fileName": "src/datepicker/bs-datepicker.component.ts",
-    "className": "BsDatepickerComponent",
+    "className": "BsDatepickerDirective",
     "description": "",
-    "selector": "bs-datepicker,[bsDatepicker]",
+    "selector": "[bsDatepicker]",
     "exportAs": "bsDatepicker",
     "inputs": [
       {
@@ -590,13 +764,19 @@ export const ngdoc: any = {
         "description": "<p>Toggles an element’s datepicker. This is considered a “manual” triggering\nof the datepicker.</p>\n",
         "args": [],
         "returnType": "void"
+      },
+      {
+        "name": "setConfig",
+        "description": "<p>Set config for datepicker</p>\n",
+        "args": [],
+        "returnType": "void"
       }
     ]
   },
   "BsDatepickerConfig": {
     "fileName": "src/datepicker/bs-datepicker.config.ts",
     "className": "BsDatepickerConfig",
-    "description": "",
+    "description": "<p>For date range picker there are <code>BsDaterangepickerConfig</code> which inherits all properties,\nexcept displayMonths, for range picker it default to <code>2</code></p>\n",
     "methods": [],
     "properties": [
       {
@@ -604,12 +784,6 @@ export const ngdoc: any = {
         "defaultValue": "theme-green",
         "type": "string",
         "description": "<p>CSS class which will be applied to datepicker container,\nusually used to set color theme</p>\n"
-      },
-      {
-        "name": "locale",
-        "defaultValue": "en",
-        "type": "string",
-        "description": "<p>Allows to globally set default locale of datepicker,\nsee documentation on how to enable custom locales</p>\n"
       },
       {
         "name": "maxDate",
@@ -639,16 +813,16 @@ export const ngdoc: any = {
     "properties": [],
     "methods": []
   },
-  "BsDaterangepickerComponent": {
+  "BsDaterangepickerDirective": {
     "fileName": "src/datepicker/bs-daterangepicker.component.ts",
-    "className": "BsDaterangepickerComponent",
+    "className": "BsDaterangepickerDirective",
     "description": "",
-    "selector": "bs-daterangepicker,[bsDaterangepicker]",
+    "selector": "[bsDaterangepicker]",
     "exportAs": "bsDaterangepicker",
     "inputs": [
       {
         "name": "bsConfig",
-        "type": "Partial<BsDatepickerConfig>",
+        "type": "Partial<BsDaterangepickerConfig>",
         "description": "<p>Config object for daterangepicker</p>\n"
       },
       {
@@ -724,6 +898,12 @@ export const ngdoc: any = {
         "returnType": "void"
       },
       {
+        "name": "setConfig",
+        "description": "<p>Set config for daterangepicker</p>\n",
+        "args": [],
+        "returnType": "void"
+      },
+      {
         "name": "hide",
         "description": "<p>Closes an element’s datepicker. This is considered a “manual” triggering of\nthe datepicker.</p>\n",
         "args": [],
@@ -736,6 +916,20 @@ export const ngdoc: any = {
         "returnType": "void"
       }
     ]
+  },
+  "BsDaterangepickerConfig": {
+    "fileName": "src/datepicker/bs-daterangepicker.config.ts",
+    "className": "BsDaterangepickerConfig",
+    "description": "",
+    "methods": [],
+    "properties": []
+  },
+  "BsLocaleService": {
+    "fileName": "src/datepicker/bs-locale.service.ts",
+    "className": "BsLocaleService",
+    "description": "",
+    "methods": [],
+    "properties": []
   },
   "DatePickerInnerComponent": {
     "fileName": "src/datepicker/datepicker-inner.component.ts",
@@ -761,6 +955,11 @@ export const ngdoc: any = {
       {
         "name": "datepickerMode",
         "type": "string",
+        "description": ""
+      },
+      {
+        "name": "dayDisabled",
+        "type": "number[]",
         "description": ""
       },
       {
@@ -902,6 +1101,11 @@ export const ngdoc: any = {
         "defaultValue": "day",
         "type": "string",
         "description": "<p>sets datepicker mode, supports: <code>day</code>, <code>month</code>, <code>year</code> </p>\n"
+      },
+      {
+        "name": "dayDisabled",
+        "type": "number[]",
+        "description": "<p>disabled days of the week from 0-6 (0=Sunday, ..., 6=Saturday) </p>\n"
       },
       {
         "name": "formatDay",
@@ -1657,7 +1861,7 @@ export const ngdoc: any = {
           },
           {
             "name": "config",
-            "type": "any"
+            "type": "ModalOptions"
           }
         ],
         "returnType": "BsModalRef"
@@ -1716,6 +1920,11 @@ export const ngdoc: any = {
         "name": "ignoreBackdropClick",
         "type": "boolean",
         "description": "<p>Ignore the backdrop click</p>\n"
+      },
+      {
+        "name": "initialState",
+        "type": "Object",
+        "description": "<p>Modal data</p>\n"
       },
       {
         "name": "keyboard",
@@ -2203,27 +2412,6 @@ export const ngdoc: any = {
     "properties": [],
     "methods": []
   },
-  "ProgressDirective": {
-    "fileName": "src/progressbar/progress.directive.ts",
-    "className": "ProgressDirective",
-    "description": "",
-    "selector": "bs-progress, [progress]",
-    "inputs": [
-      {
-        "name": "animate",
-        "type": "boolean",
-        "description": "<p>if <code>true</code> changing value of progress bar will be animated (note: not supported by Bootstrap 4) </p>\n"
-      },
-      {
-        "name": "max",
-        "type": "number",
-        "description": "<p>maximum total value of progress element </p>\n"
-      }
-    ],
-    "outputs": [],
-    "properties": [],
-    "methods": []
-  },
   "ProgressbarComponent": {
     "fileName": "src/progressbar/progressbar.component.ts",
     "className": "ProgressbarComponent",
@@ -2233,12 +2421,17 @@ export const ngdoc: any = {
       {
         "name": "animate",
         "type": "boolean",
-        "description": "<p>if <code>true</code> changing value of progress bar will be animated (note: not supported by Bootstrap 4) </p>\n"
+        "description": "<p>if <code>true</code> changing value of progress bar will be animated</p>\n"
       },
       {
         "name": "max",
         "type": "number",
         "description": "<p>maximum total value of progress element </p>\n"
+      },
+      {
+        "name": "striped",
+        "type": "boolean",
+        "description": "<p>If <code>true</code>, striped classes are applied </p>\n"
       },
       {
         "name": "type",
@@ -2263,9 +2456,9 @@ export const ngdoc: any = {
     "properties": [
       {
         "name": "animate",
-        "defaultValue": "true",
+        "defaultValue": "false",
         "type": "Boolean",
-        "description": "<p>if <code>true</code> changing value of progress bar will be animated (note: not supported by Bootstrap 4) </p>\n"
+        "description": "<p>if <code>true</code> changing value of progress bar will be animated </p>\n"
       },
       {
         "name": "max",
@@ -2449,7 +2642,7 @@ export const ngdoc: any = {
       {
         "name": "customClass",
         "type": "string",
-        "description": "<p>if set, will be added to the tab&#39;s class atribute </p>\n"
+        "description": "<p>if set, will be added to the tab&#39;s class attribute. Multiple classes are supported. </p>\n"
       },
       {
         "name": "disabled",
@@ -2597,12 +2790,17 @@ export const ngdoc: any = {
       {
         "name": "showMeridian",
         "type": "boolean",
-        "description": ""
+        "description": "<p>if true meridian button will be shown </p>\n"
+      },
+      {
+        "name": "showMinutes",
+        "type": "boolean",
+        "description": "<p>show minutes in timepicker </p>\n"
       },
       {
         "name": "showSeconds",
         "type": "boolean",
-        "description": ""
+        "description": "<p>show seconds in timepicker </p>\n"
       },
       {
         "name": "showSpinners",
@@ -2681,6 +2879,12 @@ export const ngdoc: any = {
         "defaultValue": "true",
         "type": "boolean",
         "description": "<p>if true works in 12H mode and displays AM/PM. If false works in 24H mode and hides AM/PM </p>\n"
+      },
+      {
+        "name": "showMinutes",
+        "defaultValue": "true",
+        "type": "boolean",
+        "description": "<p>show minutes in timepicker </p>\n"
       },
       {
         "name": "showSeconds",
@@ -2777,6 +2981,11 @@ export const ngdoc: any = {
         "description": "<p>Css class for tooltip container</p>\n"
       },
       {
+        "name": "delay",
+        "type": "number",
+        "description": "<p>Delay before showing the tooltip</p>\n"
+      },
+      {
         "name": "isDisabled",
         "type": "boolean",
         "description": "<p>Allows to disable tooltip</p>\n"
@@ -2845,7 +3054,6 @@ export const ngdoc: any = {
       },
       {
         "name": "tooltipPopupDelay",
-        "defaultValue": "0",
         "type": "number",
         "description": ""
       },
@@ -2970,6 +3178,12 @@ export const ngdoc: any = {
         "description": "<p>when options source is an array of objects, the name of field\nthat contains the options value, we use array item as option in case\nof this field is missing. Supports nested properties and methods.</p>\n"
       },
       {
+        "name": "typeaheadOptionsInScrollableView",
+        "defaultValue": "5",
+        "type": "number",
+        "description": "<p>specifies number of options to show in scroll view  </p>\n"
+      },
+      {
         "name": "typeaheadOptionsLimit",
         "type": "number",
         "description": "<p>maximum length of options items list </p>\n"
@@ -2979,6 +3193,12 @@ export const ngdoc: any = {
         "defaultValue": "'\"",
         "type": "string",
         "description": "<p>should be used only in case typeaheadSingleWords attribute is true.\nSets the word delimiter to match exact phrase.\nDefaults to simple and double quotes.</p>\n"
+      },
+      {
+        "name": "typeaheadScrollable",
+        "defaultValue": "false",
+        "type": "boolean",
+        "description": "<p>specifies if typeahead is scrollable  </p>\n"
       },
       {
         "name": "typeaheadSingleWords",

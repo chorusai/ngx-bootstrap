@@ -1,19 +1,19 @@
 import {
-  Component, ComponentRef, ElementRef, EventEmitter, Input, OnChanges,
+  ComponentRef, Directive, ElementRef, EventEmitter, Input, OnChanges,
   OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef
 } from '@angular/core';
+import { BsDaterangepickerConfig } from './bs-daterangepicker.config';
 import { BsDaterangepickerContainerComponent } from './themes/bs/bs-daterangepicker-container.component';
 import { Subscription } from 'rxjs/Subscription';
 import { ComponentLoaderFactory } from '../component-loader/component-loader.factory';
 import { ComponentLoader } from '../component-loader/component-loader.class';
 import { BsDatepickerConfig } from './bs-datepicker.config';
 
-@Component({
-  selector: 'bs-daterangepicker,[bsDaterangepicker]',
-  exportAs: 'bsDaterangepicker',
-  template: ' '
+@Directive({
+  selector: '[bsDaterangepicker]',
+  exportAs: 'bsDaterangepicker'
 })
-export class BsDaterangepickerComponent
+export class BsDaterangepickerDirective
   implements OnInit, OnDestroy, OnChanges {
   /**
    * Placement of a daterangepicker. Accepts: "top", "bottom", "left", "right"
@@ -75,7 +75,7 @@ export class BsDaterangepickerComponent
   /**
    * Config object for daterangepicker
    */
-  @Input() bsConfig: Partial<BsDatepickerConfig>;
+  @Input() bsConfig: Partial<BsDaterangepickerConfig>;
   /**
    * Indicates whether daterangepicker is enabled or not
    */
@@ -98,7 +98,7 @@ export class BsDaterangepickerComponent
   private _datepicker: ComponentLoader<BsDaterangepickerContainerComponent>;
   private _datepickerRef: ComponentRef<BsDaterangepickerContainerComponent>;
 
-  constructor(public _config: BsDatepickerConfig,
+  constructor(public _config: BsDaterangepickerConfig,
               _elementRef: ElementRef,
               _renderer: Renderer2,
               _viewContainerRef: ViewContainerRef,
@@ -119,6 +119,7 @@ export class BsDaterangepickerComponent
       triggers: this.triggers,
       show: () => this.show()
     });
+    this.setConfig();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -148,18 +149,7 @@ export class BsDaterangepickerComponent
       return;
     }
 
-    this._config = Object.assign(
-      {},
-      this._config,
-      {displayMonths: 2},
-      this.bsConfig,
-      {
-        value: this._bsValue,
-        isDisabled: this.isDisabled,
-        minDate: this.minDate || this._config.minDate,
-        maxDate: this.maxDate || this._config.maxDate
-      }
-    );
+    this.setConfig();
 
     this._datepickerRef = this._datepicker
       .provide({provide: BsDatepickerConfig, useValue: this._config})
@@ -183,6 +173,23 @@ export class BsDaterangepickerComponent
           this.bsValue = value;
           this.hide();
         })
+    );
+  }
+
+  /**
+   * Set config for daterangepicker
+   */
+  setConfig() {
+    this._config = Object.assign(
+      {},
+      this._config,
+      this.bsConfig,
+      {
+        value: this._bsValue,
+        isDisabled: this.isDisabled,
+        minDate: this.minDate || this.bsConfig && this.bsConfig.minDate,
+        maxDate: this.maxDate || this.bsConfig && this.bsConfig.maxDate
+      }
     );
   }
 
