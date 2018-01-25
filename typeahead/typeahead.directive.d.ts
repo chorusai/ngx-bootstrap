@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, OnDestroy, OnInit, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, EventEmitter, OnDestroy, OnInit, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/debounceTime';
@@ -6,13 +6,14 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
-import { ComponentLoaderFactory } from '../component-loader';
+import { ComponentLoaderFactory } from '../component-loader/index';
 import { TypeaheadContainerComponent } from './typeahead-container.component';
 import { TypeaheadMatch } from './typeahead-match.class';
 export declare class TypeaheadDirective implements OnInit, OnDestroy {
     private ngControl;
     private element;
     private renderer;
+    private changeDetection;
     /** options source, can be Array of strings, objects or
      * an Observable for external matching process
      */
@@ -66,6 +67,10 @@ export declare class TypeaheadDirective implements OnInit, OnDestroy {
      * Template variables: matches, itemTemplate, query
      */
     optionsListTemplate: TemplateRef<any>;
+    /** specifies if typeahead is scrollable  */
+    typeaheadScrollable: boolean;
+    /** specifies number of options to show in scroll view  */
+    typeaheadOptionsInScrollableView: number;
     /** fired when 'busy' state of this component was changed,
      * fired on async mode only, returns boolean
      */
@@ -99,8 +104,9 @@ export declare class TypeaheadDirective implements OnInit, OnDestroy {
     private _typeahead;
     private _subscriptions;
     private _outsideClickListener;
-    constructor(ngControl: NgControl, element: ElementRef, viewContainerRef: ViewContainerRef, renderer: Renderer2, cis: ComponentLoaderFactory);
+    constructor(ngControl: NgControl, element: ElementRef, viewContainerRef: ViewContainerRef, renderer: Renderer2, cis: ComponentLoaderFactory, changeDetection: ChangeDetectorRef);
     ngOnInit(): void;
+    onInput(e: any): void;
     onChange(e: any): void;
     onFocus(): void;
     onBlur(): void;

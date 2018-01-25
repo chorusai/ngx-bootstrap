@@ -1,5 +1,5 @@
 /* tslint:disable:max-file-line-count */
-import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewContainerRef } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/debounceTime';
@@ -8,15 +8,16 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/toArray';
 import { Observable } from 'rxjs/Observable';
-import { ComponentLoaderFactory } from '../component-loader';
+import { ComponentLoaderFactory } from '../component-loader/index';
 import { TypeaheadContainerComponent } from './typeahead-container.component';
 import { TypeaheadMatch } from './typeahead-match.class';
 import { getValueFromObject, latinize, tokenize } from './typeahead-utils';
 var TypeaheadDirective = (function () {
-    function TypeaheadDirective(ngControl, element, viewContainerRef, renderer, cis) {
+    function TypeaheadDirective(ngControl, element, viewContainerRef, renderer, cis, changeDetection) {
         this.ngControl = ngControl;
         this.element = element;
         this.renderer = renderer;
+        this.changeDetection = changeDetection;
         /** minimal no of characters that needs to be entered before
          * typeahead kicks-in. When set to 0, typeahead shows on focus with full
          * list of options (limited as normal by typeaheadOptionsLimit)
@@ -45,6 +46,10 @@ var TypeaheadDirective = (function () {
          * Defaults to simple and double quotes.
          */
         this.typeaheadPhraseDelimiters = '\'"';
+        /** specifies if typeahead is scrollable  */
+        this.typeaheadScrollable = false;
+        /** specifies number of options to show in scroll view  */
+        this.typeaheadOptionsInScrollableView = 5;
         /** fired when 'busy' state of this component was changed,
          * fired on async mode only, returns boolean
          */
@@ -85,29 +90,7 @@ var TypeaheadDirective = (function () {
             this.syncActions();
         }
     };
-    TypeaheadDirective.prototype.onChange = function (e) {
-        if (this._container) {
-            // esc
-            if (e.keyCode === 27) {
-                this.hide();
-                return;
-            }
-            // up
-            if (e.keyCode === 38) {
-                this._container.prevActiveMatch();
-                return;
-            }
-            // down
-            if (e.keyCode === 40) {
-                this._container.nextActiveMatch();
-                return;
-            }
-            // enter
-            if (e.keyCode === 13) {
-                this._container.selectActiveMatch();
-                return;
-            }
-        }
+    TypeaheadDirective.prototype.onInput = function (e) {
         // For `<input>`s, use the `value` property. For others that don't have a
         // `value` (such as `<span contenteditable="true">`), use either
         // `textContent` or `innerText` (depending on which one is supported, i.e.
@@ -127,10 +110,34 @@ var TypeaheadDirective = (function () {
             this.hide();
         }
     };
+    TypeaheadDirective.prototype.onChange = function (e) {
+        if (this._container) {
+            // esc
+            if (e.keyCode === 27) {
+                this.hide();
+                return;
+            }
+            // up
+            if (e.keyCode === 38) {
+                this._container.prevActiveMatch();
+                return;
+            }
+            // down
+            if (e.keyCode === 40) {
+                this._container.nextActiveMatch();
+                return;
+            }
+            // enter, tab
+            if (e.keyCode === 13) {
+                this._container.selectActiveMatch();
+                return;
+            }
+        }
+    };
     TypeaheadDirective.prototype.onFocus = function () {
         if (this.typeaheadMinLength === 0) {
             this.typeaheadLoading.emit(true);
-            this.keyUpEventEmitter.emit('');
+            this.keyUpEventEmitter.emit(this.element.nativeElement.value || '');
         }
     };
     TypeaheadDirective.prototype.onBlur = function () {
@@ -143,9 +150,15 @@ var TypeaheadDirective = (function () {
         if (!this._container) {
             return;
         }
-        // if items is visible - prevent form submition
+        // if an item is visible - prevent form submission
         if (e.keyCode === 13) {
             e.preventDefault();
+            return;
+        }
+        // if an item is visible - don't change focus
+        if (e.keyCode === 9) {
+            e.preventDefault();
+            this._container.selectActiveMatch();
             return;
         }
     };
@@ -153,6 +166,7 @@ var TypeaheadDirective = (function () {
         var valueStr = match.value;
         this.ngControl.viewToModelUpdate(valueStr);
         (this.ngControl.control).setValue(valueStr);
+        this.changeDetection.markForCheck();
         this.hide();
     };
     Object.defineProperty(TypeaheadDirective.prototype, "matches", {
@@ -174,7 +188,10 @@ var TypeaheadDirective = (function () {
             animation: false,
             dropup: this.dropup
         });
-        this._outsideClickListener = this.renderer.listen('document', 'click', function () {
+        this._outsideClickListener = this.renderer.listen('document', 'click', function (e) {
+            if (_this.typeaheadMinLength === 0 && _this.element.nativeElement.contains(e.target)) {
+                return;
+            }
             _this.onOutsideClick();
         });
         this._container = this._typeahead.instance;
@@ -338,6 +355,7 @@ var TypeaheadDirective = (function () {
         { type: ViewContainerRef, },
         { type: Renderer2, },
         { type: ComponentLoaderFactory, },
+        { type: ChangeDetectorRef, },
     ]; };
     TypeaheadDirective.propDecorators = {
         'typeahead': [{ type: Input },],
@@ -353,12 +371,15 @@ var TypeaheadDirective = (function () {
         'typeaheadPhraseDelimiters': [{ type: Input },],
         'typeaheadItemTemplate': [{ type: Input },],
         'optionsListTemplate': [{ type: Input },],
+        'typeaheadScrollable': [{ type: Input },],
+        'typeaheadOptionsInScrollableView': [{ type: Input },],
         'typeaheadLoading': [{ type: Output },],
         'typeaheadNoResults': [{ type: Output },],
         'typeaheadOnSelect': [{ type: Output },],
         'typeaheadOnBlur': [{ type: Output },],
         'container': [{ type: Input },],
         'dropup': [{ type: Input },],
+        'onInput': [{ type: HostListener, args: ['input', ['$event'],] },],
         'onChange': [{ type: HostListener, args: ['keyup', ['$event'],] },],
         'onFocus': [{ type: HostListener, args: ['click',] }, { type: HostListener, args: ['focus',] },],
         'onBlur': [{ type: HostListener, args: ['blur',] },],
