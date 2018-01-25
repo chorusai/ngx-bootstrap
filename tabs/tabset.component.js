@@ -1,9 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, Renderer2 } from '@angular/core';
 import { TabsetConfig } from './tabset.config';
 // todo: add active event to tab
 // todo: fix? mixing static and dynamic tabs position tabs in order of creation
 var TabsetComponent = (function () {
-    function TabsetComponent(config) {
+    function TabsetComponent(config, renderer) {
+        this.renderer = renderer;
         this.clazz = true;
         this.tabs = [];
         this.classMap = {};
@@ -68,7 +69,7 @@ var TabsetComponent = (function () {
         }
         this.tabs.splice(index, 1);
         if (tab.elementRef.nativeElement.parentNode) {
-            tab.elementRef.nativeElement.parentNode.removeChild(tab.elementRef.nativeElement);
+            this.renderer.removeChild(tab.elementRef.nativeElement.parentNode, tab.elementRef.nativeElement);
         }
     };
     TabsetComponent.prototype.getClosestTabIndex = function (index) {
@@ -119,6 +120,7 @@ var TabsetComponent = (function () {
     /** @nocollapse */
     TabsetComponent.ctorParameters = function () { return [
         { type: TabsetConfig, },
+        { type: Renderer2, },
     ]; };
     TabsetComponent.propDecorators = {
         'vertical': [{ type: Input },],

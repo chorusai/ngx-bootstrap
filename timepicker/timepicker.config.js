@@ -22,6 +22,8 @@ var TimepickerConfig = (function () {
         this.showSpinners = true;
         /** show seconds in timepicker */
         this.showSeconds = false;
+        /** show minutes in timepicker */
+        this.showMinutes = true;
     }
     TimepickerConfig.decorators = [
         { type: Injectable },

@@ -11,7 +11,7 @@ export declare class TabDirective implements OnInit, OnDestroy {
     disabled: boolean;
     /** if true tab can be removable, additional button will appear */
     removable: boolean;
-    /** if set, will be added to the tab's class atribute */
+    /** if set, will be added to the tab's class attribute. Multiple classes are supported. */
     customClass: string;
     /** tab active state toggle */
     active: boolean;

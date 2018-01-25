@@ -22,7 +22,11 @@ export declare class TimepickerComponent implements ControlValueAccessor, Timepi
     arrowkeys: boolean;
     /** if true spinner arrows above and below the inputs will be shown */
     showSpinners: boolean;
+    /** if true meridian button will be shown */
     showMeridian: boolean;
+    /** show minutes in timepicker */
+    showMinutes: boolean;
+    /** show seconds in timepicker */
     showSeconds: boolean;
     /** meridian labels based on locale */
     meridians: string[];

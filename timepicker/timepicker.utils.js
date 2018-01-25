@@ -107,6 +107,7 @@ export function padNumber(value) {
     return "0" + _value;
 }
 export function isInputValid(hours, minutes, seconds, isPM) {
+    if (minutes === void 0) { minutes = '0'; }
     if (seconds === void 0) { seconds = '0'; }
     return !(isNaN(parseHours(hours, isPM))
         || isNaN(parseMinutes(minutes))
