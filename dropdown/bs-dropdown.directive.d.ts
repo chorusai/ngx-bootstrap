@@ -1,6 +1,6 @@
 import { ElementRef, EventEmitter, OnDestroy, OnInit, Renderer2, ViewContainerRef } from '@angular/core';
 import 'rxjs/add/operator/filter';
-import { ComponentLoaderFactory } from '../component-loader';
+import { ComponentLoaderFactory } from '../component-loader/index';
 import { BsDropdownConfig } from './bs-dropdown.config';
 import { BsDropdownState } from './bs-dropdown.state';
 export declare class BsDropdownDirective implements OnInit, OnDestroy {
